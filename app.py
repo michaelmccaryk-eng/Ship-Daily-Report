@@ -100,11 +100,122 @@ def date_range_label(d1: date, d2: date) -> str:
     return ""
 
 
+def apply_theme(mode: str) -> None:
+    themes = {
+        "Light": {
+            "color_scheme": "light",
+            "background": "#f6f8fb",
+            "sidebar": "#e4e7ec",
+            "card": "#ffffff",
+            "text": "#1f2933",
+            "border": "#d0d7de",
+            "accent": "#2563eb",
+            "accent_border": "#1d4ed8",
+            "button_text": "#ffffff",
+            "code_bg": "#0f172a",
+        },
+        "Dark": {
+            "color_scheme": "dark",
+            "background": "#0f172a",
+            "sidebar": "#111827",
+            "card": "#1f2937",
+            "text": "#f8fafc",
+            "border": "#334155",
+            "accent": "#38bdf8",
+            "accent_border": "#0ea5e9",
+            "button_text": "#03203c",
+            "code_bg": "#020617",
+        },
+    }
+
+    palette = themes.get(mode, themes["Light"])
+    css = f"""
+    <style>
+    :root {{
+        color-scheme: {palette['color_scheme']};
+    }}
+
+    body {{
+        background-color: {palette['background']};
+        color: {palette['text']};
+    }}
+
+    [data-testid="stAppViewContainer"] {{
+        background-color: {palette['background']};
+        color: {palette['text']};
+    }}
+
+    [data-testid="stHeader"] {{
+        background: transparent;
+    }}
+
+    [data-testid="stSidebar"] > div:first-child {{
+        background-color: {palette['sidebar']};
+    }}
+
+    .stMarkdown, .stCaption, .stText, .stExpander, .stCode {{
+        color: {palette['text']};
+    }}
+
+    .stExpander {{
+        background-color: {palette['card']};
+        border: 1px solid {palette['border']};
+        border-radius: 0.5rem;
+    }}
+
+    .stExpander:hover {{
+        border-color: {palette['accent_border']};
+    }}
+
+    .stDownloadButton button, .stButton button {{
+        background-color: {palette['accent']};
+        color: {palette['button_text']};
+        border: 1px solid {palette['accent_border']};
+        border-radius: 0.5rem;
+    }}
+
+    .stDownloadButton button:hover, .stButton button:hover {{
+        filter: brightness(0.95);
+    }}
+
+    textarea, input, .stTextInput > div > div > input {{
+        background-color: {palette['card']};
+        color: {palette['text']};
+        border: 1px solid {palette['border']};
+        border-radius: 0.5rem;
+    }}
+
+    textarea:focus, input:focus {{
+        border-color: {palette['accent_border']};
+        box-shadow: 0 0 0 1px {palette['accent_border']};
+    }}
+
+    .stTextArea textarea {{
+        min-height: 160px;
+    }}
+
+    .stRadio label, .stCheckbox label {{
+        color: {palette['text']};
+    }}
+
+    .stCode > div {{
+        background-color: {palette['code_bg']};
+        color: {palette['text']};
+        border-radius: 0.5rem;
+    }}
+
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
+
+
 # ---------- UI ----------
 st.set_page_config(page_title="Ship Daily Report Builder", page_icon="🛠️", layout="wide")
 st.title("🛠️ Ship Daily Report Builder")
 
 with st.sidebar:
+    theme_mode = st.radio("Theme", ["Light", "Dark"], horizontal=True, index=0, key="theme_mode")
+    st.markdown("---")
     st.markdown("**Report Header**")
     ship = st.text_input("Ship Name", placeholder="e.g., USNS Comfort (T-AH-20)")
     colA, colB = st.columns(2)
@@ -118,6 +229,8 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**Signature**")
     signature = st.text_input("Sign-off (optional)", placeholder="e.g., Michael McCary, Robert Tippitt")
+
+apply_theme(theme_mode)
 
 st.markdown("### Sections")
 st.caption("Add content below. Use the toggles to choose bullet lists or free text for each section.")
