@@ -42,13 +42,5 @@ requirements.txt    # Python dependencies
 launcher.spec       # PyInstaller build spec
 start-report.bat    # Optional quick-start script
 🛡️ License & Contact
-Private internal project for MSC Engineering / CACI use only.
 Developed by Michael McCary – Port Engineer / CQAR
 For questions or collaboration, contact: michaelmccaryk-eng@users.noreply.github.com
-
-yaml
-Copy code
-
----
-
-Would you like me to make it slightly more “official” with a **CACI / MSC internal disclaimer block** (like you’d use for submission or internal GitHub Enterprise)?
